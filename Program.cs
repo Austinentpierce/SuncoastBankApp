@@ -8,7 +8,6 @@ namespace SuncoastBankApp
     {
         public int Amount { get; set; }
         public string Type { get; set; }
-        public DateTime TimeStamp { get; set; }
         public string Account { get; set; }
 
     }
