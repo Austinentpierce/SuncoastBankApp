@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CsvHelper;
+//using CsvHelper;
 using System.Globalization;
 using System.IO;
 
@@ -9,9 +9,9 @@ namespace SuncoastBankApp
 {
     public class Transaction
     {
-        public int Amount { get; set; }
-        public string TransactionType { get; set; }
         public string AccountType { get; set; }
+        public string TransactionType { get; set; }
+        public int Amount { get; set; }
     }
 
     class Program
@@ -45,9 +45,9 @@ namespace SuncoastBankApp
             if (File.Exists("transactions.csv"))
             {
                 var fileReader = new StreamReader("transactions.csv");
-                var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
+                //var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
 
-                transactions = csvReader.GetRecords<Transaction>().ToList();
+                //transactions = csvReader.GetRecords<Transaction>().ToList();
                 fileReader.Close();
             }
             {
@@ -62,7 +62,6 @@ namespace SuncoastBankApp
                 Console.WriteLine("Menu Choices");
                 Console.WriteLine();
                 Console.WriteLine("[D]eposit");
-                Console.WriteLine("[T]ransfer");
                 Console.WriteLine("[W]ithdraw");
                 Console.WriteLine("[B]alance");
                 Console.WriteLine("[H]istory");
@@ -103,7 +102,7 @@ namespace SuncoastBankApp
                 {
                     var transaction = new Transaction();
                     Console.WriteLine();
-                    Console.WriteLine('Which account would you like to choose from: /n[C]hecking/n[S]avingd')
+                    Console.WriteLine("Which account would you like to choose from: /n[C]hecking/n[S]avings");
                     var checkingOrSavings = Console.ReadLine().ToUpper();
                     if (checkingOrSavings == "C")
                     {
