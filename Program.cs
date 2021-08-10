@@ -1,62 +1,228 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CsvHelper;
+using System.Globalization;
+using System.IO;
 
 namespace SuncoastBankApp
 {
-    class Transaction
+    public class Transaction
     {
         public int Amount { get; set; }
-        public string Type { get; set; }
-        public string Account { get; set; }
-
+        public string TransactionType { get; set; }
+        public string AccountType { get; set; }
     }
 
     class Program
     {
-        static string PromptForString(string prompt)
-        {
-            Console.Write(prompt);
-
-            var userInput = Console.ReadLine();
-
-            return userInput;
-        }
         static int PromptForInteger(string prompt)
         {
+
             Console.Write(prompt);
+            int userInput;
+            var isThisGoodInput = Int32.TryParse(Console.ReadLine(), out userInput);
 
-            var userInput = Console.ReadLine();
-            var userInputAsNumber = int.Parse(userInput);
+            if (isThisGoodInput)
+            {
+                return userInput;
+            }
+            else
+            {
+                Console.WriteLine("Sorry, that is not an option");
+                Console.WriteLine();
+                return 0;
+            }
 
-            return userInputAsNumber;
         }
+
+
 
         static void Main(string[] args)
         {
-            var transactions = new List<Transaction>()
-          {
-          new Transaction {Type = "Deposit", Amount = 500, Account = "Checking" },
-          new Transaction {Type = "Deposit", Amount = 4000, Account = "Savings" },
-          new Transaction {Type = "Withdrawl", Amount = 375, Account = "Checking" },
-          new Transaction {Type = "Withdrawl", Amount = 2350, Account = "Savings"}
-          };
+            var transactions = new List<Transaction>();
+
+            if (File.Exists("transactions.csv"))
+            {
+                var fileReader = new StreamReader("transactions.csv");
+                var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
+
+                transactions = csvReader.GetRecords<Transaction>().ToList();
+                fileReader.Close();
+            }
+            {
+                new Transaction { TransactionType = "Deposit", Amount = 500, AccountType = "Checking" };
+                new Transaction { TransactionType = "Deposit", Amount = 4000, AccountType = "Savings" };
+                new Transaction { TransactionType = "Withdrawl", Amount = 375, AccountType = "Checking" };
+                new Transaction { TransactionType = "Withdrawl", Amount = 2350, AccountType = "Savings" };
+            };
             var userHasChosenToQuit = false;
             while (userHasChosenToQuit == false)
             {
                 Console.WriteLine("Menu Choices");
                 Console.WriteLine();
-                Console.WriteLine("Deposit");
-                Console.WriteLine("Transfer");
-                Console.WriteLine("Withdraw");
-                Console.WriteLine("Balance");
-                Console.WriteLine("History");
-                Console.WriteLine("Quit");
+                Console.WriteLine("[D]eposit");
+                Console.WriteLine("[T]ransfer");
+                Console.WriteLine("[W]ithdraw");
+                Console.WriteLine("[B]alance");
+                Console.WriteLine("[H]istory");
+                Console.WriteLine("[Q]uit");
 
-                var choice = PromptForString("Choice : ").ToUpper();
-                if (choice == "Deposit")
+                var choice = Console.ReadLine().ToUpper();
+                if (choice == "D")
                 {
-                    Console.WriteLine($)
+                    var transaction = new Transaction();
+                    Console.WriteLine();
+                    Console.WriteLine("Which account would you like to deposit to:/n[C]hecking/n[S]avings");
+                    var checkingOrSavings = Console.ReadLine().ToUpper();
+                    if (checkingOrSavings == "C")
+                    {
+                        transaction.AccountType = "Checking";
+                        Console.WriteLine();
+                        transaction.Amount = PromptForInteger("How much would you like to deposit to your checking? ");
+                        transaction.TransactionType = "Deposit";
+                        transactions.Add(transaction);
+                    }
+                    else
+                    if (checkingOrSavings == "S")
+                    {
+                        transaction.AccountType = "Savings";
+                        Console.WriteLine();
+                        transaction.Amount = PromptForInteger("How much would you like to deposit to your savings? ");
+                        transaction.TransactionType = "Deposit";
+                        transactions.Add(transaction);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid selection");
+                    }
+                }
+
+                else
+                if (choice == "W")
+                {
+                    var transaction = new Transaction();
+                    Console.WriteLine();
+                    Console.WriteLine('Which account would you like to choose from: /n[C]hecking/n[S]avingd')
+                    var checkingOrSavings = Console.ReadLine().ToUpper();
+                    if (checkingOrSavings == "C")
+                    {
+                        Console.WriteLine();
+                        transaction.Amount = PromptForInteger("What amount would you like to withdraw from your checking account? ");
+                        var accountTotal = transactions.Where(transaction => transaction.TransactionType == "Checking").Sum(transaction => transaction.Amount);
+                        if (transaction.Amount > accountTotal)
+                        {
+                            Console.WriteLine("Not enough money in account");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            transaction.AccountType = "Checking";
+                            transaction.TransactionType = "Withdraw";
+                            transactions.Add(transaction);
+                        }
+                    }
+                    else
+                    if (checkingOrSavings == "S")
+                    {
+                        Console.WriteLine();
+                        transaction.Amount = PromptForInteger("How much would you like to withdraw from your savings? ");
+                        var accountTotal = transactions.Where(transaction => transaction.TransactionType == "Savings").Sum(transaction => transaction.Amount);
+                        if (transaction.Amount > accountTotal)
+                        {
+                            Console.WriteLine("Not enough money in account");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            transaction.AccountType = "Savings";
+                            transaction.TransactionType = "Withdraw";
+                            transactions.Add(transaction);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid selection");
+                    }
+                }
+                else
+                if (choice == "B")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Which account would you like to see the balance of:\n[C]hecking\n[S]avings ");
+                    var checkingOrSavings = Console.ReadLine().ToUpper();
+                    if (checkingOrSavings == "C")
+                    {
+                        var checkingBalance = 0;
+                        foreach (var transaction in transactions)
+                        {
+                            if (transaction.AccountType == "Checking" && transaction.TransactionType == "Deposit")
+                            {
+                                checkingBalance += transaction.Amount;
+                            }
+                            if (transaction.AccountType == "Checking" && transaction.TransactionType == "Withdraw")
+                            {
+                                checkingBalance -= transaction.Amount;
+                            }
+                        }
+                        Console.WriteLine($"Checking balance is {checkingBalance}");
+                    }
+                    if (checkingOrSavings == "S")
+                    {
+                        var savingsBalance = 0;
+                        foreach (var transaction in transactions)
+                        {
+                            if (transaction.AccountType == "Savings" && transaction.TransactionType == "Deposit")
+                            {
+                                savingsBalance += transaction.Amount;
+                            }
+                            if (transaction.AccountType == "Savings" && transaction.TransactionType == "Withdraw")
+                            {
+                                savingsBalance -= transaction.Amount;
+                            }
+                        }
+                        Console.WriteLine($"Savings balance is {savingsBalance}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid selection");
+                    }
+
+                }
+                else
+                if (choice == "H")
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("WHich account would you like to show the transactions of:\n[C]hecking\n[S]avings ");
+                    var checkingOrSavings = Console.ReadLine().ToUpper();
+                    if (checkingOrSavings == "C")
+                    {
+                        var checkingTransactions = transactions.Where(transaction => transaction.AccountType == "Checking");
+                        foreach (var checkingTransaction in checkingTransactions)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"{checkingTransaction.TransactionType} of {checkingTransaction.Amount}");
+                        }
+                    }
+                    else
+                    if (checkingOrSavings == "S")
+                    {
+                        var savingsTransactions = transactions.Where(transaction => transaction.AccountType == "Savings");
+                        foreach (var savingsTransaction in savingsTransactions)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"{savingsTransaction.TransactionType} of {savingsTransaction.Amount}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid selection");
+                    }
+                }
+                else
+                if (choice == "Q")
+                {
+                    userHasChosenToQuit = true;
                 }
             }
 
