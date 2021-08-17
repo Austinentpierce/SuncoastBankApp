@@ -7,7 +7,7 @@ using System.IO;
 
 namespace SuncoastBankApp
 {
-    public class Transaction
+    class Transaction
     {
         public string AccountType { get; set; }
         public string TransactionType { get; set; }
@@ -56,8 +56,8 @@ namespace SuncoastBankApp
                 new Transaction { TransactionType = "Withdrawl", Amount = 375, AccountType = "Checking" };
                 new Transaction { TransactionType = "Withdrawl", Amount = 2350, AccountType = "Savings" };
             };
-            var userHasChosenToQuit = false;
-            while (userHasChosenToQuit == false)
+            var keepGoing = true;
+            while (keepGoing)
             {
                 Console.WriteLine("Menu Choices");
                 Console.WriteLine();
@@ -72,7 +72,9 @@ namespace SuncoastBankApp
                 {
                     var transaction = new Transaction();
                     Console.WriteLine();
-                    Console.WriteLine("Which account would you like to deposit to:/n[C]hecking/n[S]avings");
+                    Console.WriteLine("Which account would you like to deposit to: ");
+                    Console.WriteLine("[C]hecking");
+                    Console.WriteLine("[S]avings");
                     var checkingOrSavings = Console.ReadLine().ToUpper();
                     if (checkingOrSavings == "C")
                     {
@@ -102,7 +104,9 @@ namespace SuncoastBankApp
                 {
                     var transaction = new Transaction();
                     Console.WriteLine();
-                    Console.WriteLine("Which account would you like to choose from: /n[C]hecking/n[S]avings");
+                    Console.WriteLine("Which account would you like to choose from: ");
+                    Console.WriteLine("[C]hecking");
+                    Console.WriteLine("[S]avings");
                     var checkingOrSavings = Console.ReadLine().ToUpper();
                     if (checkingOrSavings == "C")
                     {
@@ -221,7 +225,7 @@ namespace SuncoastBankApp
                 else
                 if (choice == "Q")
                 {
-                    userHasChosenToQuit = true;
+                    keepGoing = false;
                 }
             }
 
