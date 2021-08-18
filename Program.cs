@@ -54,8 +54,8 @@ namespace SuncoastBankApp
             {
                 new Transaction { TransactionType = "Deposit", Amount = 500, AccountType = "Checking" };
                 new Transaction { TransactionType = "Deposit", Amount = 4000, AccountType = "Savings" };
-                new Transaction { TransactionType = "Withdrawl", Amount = 375, AccountType = "Checking" };
-                new Transaction { TransactionType = "Withdrawl", Amount = 2350, AccountType = "Savings" };
+                new Transaction { TransactionType = "Withdraw", Amount = 375, AccountType = "Checking" };
+                new Transaction { TransactionType = "Withdraw", Amount = 2350, AccountType = "Savings" };
             };
             var keepGoing = true;
             while (keepGoing)
