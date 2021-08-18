@@ -5,6 +5,7 @@ using CsvHelper;
 using System.Globalization;
 using System.IO;
 
+
 namespace SuncoastBankApp
 {
     class Transaction
@@ -45,9 +46,9 @@ namespace SuncoastBankApp
             if (File.Exists("transactions.csv"))
             {
                 var fileReader = new StreamReader("transactions.csv");
-                //var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
+                var csvReader = new CsvReader(fileReader, CultureInfo.InvariantCulture);
 
-                //transactions = csvReader.GetRecords<Transaction>().ToList();
+                transactions = csvReader.GetRecords<Transaction>().ToList();
                 fileReader.Close();
             }
             {
@@ -227,6 +228,17 @@ namespace SuncoastBankApp
                 {
                     keepGoing = false;
                 }
+                else
+                {
+                    Console.WriteLine("Invalid Selection");
+                }
+                var fileWriter = new StreamWriter("transactions.csv");
+
+                var csvWriter = new CsvWriter(fileWriter, CultureInfo.InvariantCulture);
+
+                csvWriter.WriteRecords(transactions);
+
+                fileWriter.Close();
             }
 
         }
