@@ -1,3 +1,5 @@
-Account         Type           Amount
-Checking        Deposit        200
-Checking        Deposit        200
+AccountType   TransactionType  Amount
+Checking        Deposit         500
+Checking        Withdraw        375
+Savings         Deposit         4000
+Savings         Withdraw        2350
