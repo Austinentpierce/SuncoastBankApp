@@ -1,5 +1,6 @@
-AccountType   TransactionType  Amount
-Checking        Deposit         500
-Checking        Withdraw        375
-Savings         Deposit         4000
-Savings         Withdraw        2350
+AccountType,TransactionType,Amount
+Checking,Deposit,500
+Checking,Withdraw,375
+Savings,Deposit,4000
+Savings,Withdraw,2350
+Checking,Deposit,290
