@@ -4,6 +4,7 @@ using System.Linq;
 using CsvHelper;
 using System.Globalization;
 using System.IO;
+using CsvHelper.Configuration;
 
 
 namespace SuncoastBankApp
@@ -51,12 +52,12 @@ namespace SuncoastBankApp
                 transactions = csvReader.GetRecords<Transaction>().ToList();
                 fileReader.Close();
             }
-            {
-                new Transaction { TransactionType = "Deposit", Amount = 500, AccountType = "Checking" };
-                new Transaction { TransactionType = "Deposit", Amount = 4000, AccountType = "Savings" };
-                new Transaction { TransactionType = "Withdraw", Amount = 375, AccountType = "Checking" };
-                new Transaction { TransactionType = "Withdraw", Amount = 2350, AccountType = "Savings" };
-            };
+
+            //new Transaction { TransactionType = "Deposit", Amount = 500, AccountType = "Checking" };
+            //new Transaction { TransactionType = "Deposit", Amount = 4000, AccountType = "Savings" };
+            //new Transaction { TransactionType = "Withdraw", Amount = 375, AccountType = "Checking" };
+            //new Transaction { TransactionType = "Withdraw", Amount = 2350, AccountType = "Savings" };
+
             var keepGoing = true;
             while (keepGoing)
             {
